@@ -31,7 +31,7 @@ public class PrinterUtility {
                 // Toast.makeText(this._context, "Get dal cost:"+(System.currentTimeMillis() - start)+" ms", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
-                // Toast.makeText(this._context, "error occurred,DAL is null.", Toast.LENGTH_LONG).show();
+                 Toast.makeText(this._context, "error occurred,DAL is null.", Toast.LENGTH_LONG).show();
             }
         }
         return dal;

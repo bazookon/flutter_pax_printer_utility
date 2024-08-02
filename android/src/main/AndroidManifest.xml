@@ -2,6 +2,7 @@
   package="com.mahatech.flutter_pax_printer_utility">
 
     <uses-permission android:name="com.pax.permission.PRINTER"/>
+    <uses-permission android:name="com.pax.permission.SCANNER"/>
     
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>

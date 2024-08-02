@@ -2,6 +2,7 @@ package com.mahatech.flutter_pax_printer_utility;
 
 import static java.lang.Byte.parseByte;
 
+import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Printer;
@@ -13,6 +14,7 @@ import com.pax.dal.entity.EFontTypeAscii;
 import com.pax.dal.entity.EFontTypeExtCode;
 import com.pax.dal.entity.ETermInfoKey;
 import com.pax.dal.entity.ScanResult;
+import com.pax.neptunelite.api.NeptuneLiteUser;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -245,7 +247,7 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
           result.error("UNAVAILABLE", "SN not available.", null);
         }
     } else if (call.method.equals("scan")) {
-        IDAL dal =  printerUtility.getDal();
+      IDAL dal = printerUtility.getDal();
         if (dal == null) {
           result.error("SCAN_ERROR", "DAL not available.", null);
           return;
