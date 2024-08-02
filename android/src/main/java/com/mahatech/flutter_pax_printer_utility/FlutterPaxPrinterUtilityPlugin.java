@@ -8,8 +8,11 @@ import android.util.Printer;
 
 import androidx.annotation.NonNull;
 
+import com.pax.dal.IDAL;
 import com.pax.dal.entity.EFontTypeAscii;
 import com.pax.dal.entity.EFontTypeExtCode;
+import com.pax.dal.entity.ETermInfoKey;
+import com.pax.dal.entity.ScanResult;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -232,6 +235,22 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
       int mode = call.argument("mode");
       printerUtility.cutPaper(mode);
       result.success(true);
+    }
+    else if (call.method.equals("getSN")){
+      IDAL dal =  printerUtility.getDal();
+        String sn = dal.getSys().getTermInfo().get(ETermInfoKey.SN);
+        if (sn != null) {
+          result.success(sn);
+        } else {
+          result.error("UNAVAILABLE", "SN not available.", null);
+        }
+    } else if (call.method.equals("scan")) {
+        IDAL dal =  printerUtility.getDal();
+        if (dal == null) {
+          result.error("SCAN_ERROR", "DAL not available.", null);
+          return;
+        }
+        ScannerUtil.scan(dal, result);
     } else {
       result.notImplemented();
     }

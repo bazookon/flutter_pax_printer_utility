@@ -44,6 +44,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     initPlatformState();
     getPrinterStatus();
+
+    // Scanner
+    FlutterPaxPrinterUtility.scan().then((value) {
+      if (value == null) return;
+      // Toast message
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(value),
+        backgroundColor: Colors.green,
+      ));
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -210,6 +220,17 @@ class _HomePageState extends State<HomePage> {
               'Running on: $_platformVersion\n',
               textAlign: TextAlign.center,
             ),
+            FutureBuilder(
+                future: FlutterPaxPrinterUtility.getSN(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Text('SN: ${snapshot.data}',
+                        textAlign: TextAlign.center);
+                  } else {
+                    return const Text('SN: Loading...',
+                        textAlign: TextAlign.center);
+                  }
+                }),
             statusPrinter == '1'
                 ? const Text(
                     'Status Printer: Connected',
