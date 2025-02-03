@@ -95,6 +95,8 @@ public class PrinterUtility {
 
     }
 
+
+
     public void step(int b) {
         try {
             printer.step(b);
