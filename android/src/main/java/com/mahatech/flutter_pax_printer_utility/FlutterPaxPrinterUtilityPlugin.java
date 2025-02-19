@@ -17,6 +17,7 @@ import com.pax.dal.entity.ScanResult;
 import com.pax.neptunelite.api.NeptuneLiteUser;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -32,9 +33,25 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
   private static PrinterUtility printerUtility;
   private static QRCodeUtil qrcodeUtility;
 
+  final String SCANNER_STREAM = "flutter_pax_printer_utility/scanner";
+  EventChannel.EventSink scannerSink = null;
+
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_pax_printer_utility");
+    EventChannel scannerChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), SCANNER_STREAM);
+    scannerChannel.setStreamHandler(new EventChannel.StreamHandler() {
+      @Override
+      public void onListen(Object o, EventChannel.EventSink eventSink) {
+        scannerSink = eventSink;
+      }
+
+      @Override
+      public void onCancel(Object o) {
+        scannerSink = null;
+      }
+    });
+
     channel.setMethodCallHandler(this);
     printerUtility =
             new PrinterUtility(flutterPluginBinding.getApplicationContext());
@@ -252,7 +269,10 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
           result.error("SCAN_ERROR", "DAL not available.", null);
           return;
         }
-        ScannerUtil.scan(dal, result);
+
+        ScannerUtil.scan(dal, scannerSink);
+        result.success(null);
+
     } else {
       result.notImplemented();
     }

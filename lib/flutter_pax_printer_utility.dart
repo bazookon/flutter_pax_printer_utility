@@ -345,6 +345,14 @@ class FlutterPaxPrinterUtility {
     final String? response = await _channel.invokeMethod('scan');
     return response;
   }
+
+  static Stream<String> get scanStream {
+    const eventChannel = EventChannel('flutter_pax_printer_utility/scanner');
+
+    return eventChannel.receiveBroadcastStream().map((dynamic event) {
+      return event as String;
+    });
+  }
 }
 
 enum PrinterStatus {

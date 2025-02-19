@@ -6,6 +6,7 @@ import 'package:flutter_pax_printer_utility/flutter_pax_printer_utility.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_pax_printer_utility_example/scanner_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -268,6 +269,11 @@ class _HomePageState extends State<HomePage> {
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const ReceiptPage())),
               child: const Text("TEST PRINT RECEIPT FROM BITMAP VIEW"),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ScannerView())),
+              child: const Text("TEST SCANNER"),
             ),
           ],
         ),
