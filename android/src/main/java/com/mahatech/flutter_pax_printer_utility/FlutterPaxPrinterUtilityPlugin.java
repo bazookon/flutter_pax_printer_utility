@@ -63,9 +63,17 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else if (call.method.equals("init")) { // instant bind or init
-      printerUtility.getDal();
-      printerUtility.init();
-      result.success(true);
+      boolean initialized = false;
+      try {
+        IDAL dal = printerUtility.getDal();
+        if (dal != null) {
+          printerUtility.init();
+          initialized = true;
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      result.success(initialized);
     } else if (call.method.equals("getStatus")) {
       String status = printerUtility.getStatus();
       result.success(status);
