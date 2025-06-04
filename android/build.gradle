@@ -37,9 +37,18 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
+    // Ensure native libraries are packaged from jniLibs
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
 }
 
 dependencies {
+    // Include PAX NeptuneLiteApi jar explicitly
+    implementation files('libs/NeptuneLiteApi_V3.20.00_20201229.jar')
+    // Also include any other jars placed in libs
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.zxing:core:3.1.0'
 }
