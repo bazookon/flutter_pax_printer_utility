@@ -25,9 +25,11 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 /** FlutterPaxPrinterUtilityPlugin */
 public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCallHandler {
-  /// The MethodChannel that will the communication between Flutter and native Android
+  /// The MethodChannel that will the communication between Flutter and native
+  /// Android
   ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+  /// This local reference serves to register the plugin with the Flutter Engine
+  /// and unregister it
   /// when the Flutter Engine is detached from the Activity
   private MethodChannel channel;
   private static PrinterUtility printerUtility;
@@ -53,9 +55,8 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
     });
 
     channel.setMethodCallHandler(this);
-    printerUtility =
-            new PrinterUtility(flutterPluginBinding.getApplicationContext());
-            qrcodeUtility = new QRCodeUtil();
+    printerUtility = new PrinterUtility(flutterPluginBinding.getApplicationContext());
+    qrcodeUtility = new QRCodeUtil();
   }
 
   @Override
@@ -63,21 +64,13 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else if (call.method.equals("init")) { // instant bind or init
-      boolean initialized = false;
-      try {
-        IDAL dal = printerUtility.getDal();
-        if (dal != null) {
-          printerUtility.init();
-          initialized = true;
-        }
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      result.success(initialized);
+      printerUtility.getDal();
+      printerUtility.init();
+      result.success(true);
     } else if (call.method.equals("getStatus")) {
       String status = printerUtility.getStatus();
       result.success(status);
-    }  else if (call.method.equals("printReceipt")) { // instant print receipt
+    } else if (call.method.equals("printReceipt")) { // instant print receipt
       String text = call.argument("text");
       printerUtility.getDal();
       printerUtility.init();
@@ -100,7 +93,7 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
       printerUtility.printStr(text, null);
       printerUtility.printStr("", null);
       if (qrString != null) {
-        printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, 512, 512 ));
+        printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, 512, 512));
         printerUtility.printStr("", null);
       }
       printerUtility.step(150);
@@ -122,7 +115,7 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
       printerUtility.printStr(text2, null);
       printerUtility.printStr(text3, null);
       printerUtility.printStr("", null);
-      printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, 512, 512 ));
+      printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, 512, 512));
       printerUtility.printStr("", null);
       printerUtility.printStr(text4, null);
       printerUtility.step(150);
@@ -139,25 +132,25 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
         asciiFontType = EFontTypeAscii.FONT_8_16;
       } else if (asciiFontTypeString.equals("FONT_16_24")) {
         asciiFontType = EFontTypeAscii.FONT_16_24;
-      }else if (asciiFontTypeString.equals("FONT_12_24")) {
+      } else if (asciiFontTypeString.equals("FONT_12_24")) {
         asciiFontType = EFontTypeAscii.FONT_12_24;
-      }else if (asciiFontTypeString.equals("FONT_8_32")) {
+      } else if (asciiFontTypeString.equals("FONT_8_32")) {
         asciiFontType = EFontTypeAscii.FONT_8_32;
-      }else if (asciiFontTypeString.equals("FONT_16_48")) {
+      } else if (asciiFontTypeString.equals("FONT_16_48")) {
         asciiFontType = EFontTypeAscii.FONT_16_48;
-      }else if (asciiFontTypeString.equals("FONT_12_48")) {
+      } else if (asciiFontTypeString.equals("FONT_12_48")) {
         asciiFontType = EFontTypeAscii.FONT_12_48;
-      }else if (asciiFontTypeString.equals("FONT_16_16")) {
+      } else if (asciiFontTypeString.equals("FONT_16_16")) {
         asciiFontType = EFontTypeAscii.FONT_16_16;
-      }else if (asciiFontTypeString.equals("FONT_32_24")) {
+      } else if (asciiFontTypeString.equals("FONT_32_24")) {
         asciiFontType = EFontTypeAscii.FONT_32_24;
-      }else if (asciiFontTypeString.equals("FONT_24_24")) {
+      } else if (asciiFontTypeString.equals("FONT_24_24")) {
         asciiFontType = EFontTypeAscii.FONT_24_24;
-      }else if (asciiFontTypeString.equals("FONT_16_32")) {
+      } else if (asciiFontTypeString.equals("FONT_16_32")) {
         asciiFontType = EFontTypeAscii.FONT_16_32;
-      }else if (asciiFontTypeString.equals("FONT_32_48")) {
+      } else if (asciiFontTypeString.equals("FONT_32_48")) {
         asciiFontType = EFontTypeAscii.FONT_32_48;
-      }else if (asciiFontTypeString.equals("FONT_24_48")) {
+      } else if (asciiFontTypeString.equals("FONT_24_48")) {
         asciiFontType = EFontTypeAscii.FONT_24_48;
       } else {
         asciiFontType = EFontTypeAscii.FONT_8_16;
@@ -167,22 +160,22 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
         cFontType = EFontTypeExtCode.FONT_16_16;
       } else if (cFontTypeString.equals("FONT_24_24")) {
         cFontType = EFontTypeExtCode.FONT_24_24;
-      }else if (cFontTypeString.equals("FONT_16_32")) {
+      } else if (cFontTypeString.equals("FONT_16_32")) {
         cFontType = EFontTypeExtCode.FONT_16_32;
-      }else if (cFontTypeString.equals("FONT_24_48")) {
+      } else if (cFontTypeString.equals("FONT_24_48")) {
         cFontType = EFontTypeExtCode.FONT_24_48;
-      }else if (cFontTypeString.equals("FONT_32_16")) {
+      } else if (cFontTypeString.equals("FONT_32_16")) {
         cFontType = EFontTypeExtCode.FONT_32_16;
-      }else if (cFontTypeString.equals("FONT_48_24")) {
+      } else if (cFontTypeString.equals("FONT_48_24")) {
         cFontType = EFontTypeExtCode.FONT_48_24;
-      }else if (cFontTypeString.equals("FONT_32_32")) {
+      } else if (cFontTypeString.equals("FONT_32_32")) {
         cFontType = EFontTypeExtCode.FONT_32_32;
-      }else if (cFontTypeString.equals("FONT_48_48")) {
+      } else if (cFontTypeString.equals("FONT_48_48")) {
         cFontType = EFontTypeExtCode.FONT_48_48;
       } else {
         cFontType = EFontTypeExtCode.FONT_16_16;
       }
-      
+
       printerUtility.fontSet(asciiFontType, cFontType);
       result.success(true);
     } else if (call.method.equals("spaceSet")) {
@@ -209,7 +202,7 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
       Thread thread = new Thread(new Runnable() {
         @Override
         public void run() {
-          try  {
+          try {
             printerUtility.printBitmap(qrcodeUtility.getBitmapFromURL(url));
             result.success(true);
           } catch (Exception e) {
@@ -219,7 +212,7 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
       });
 
       thread.start();
-    }  else if (call.method.equals("printImageAsset")) {
+    } else if (call.method.equals("printImageAsset")) {
       byte[] bytes = call.argument("bitmap");
       Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
       printerUtility.printBitmap(bitmap);
@@ -228,7 +221,7 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
       String qrString = call.argument("text");
       int width = call.argument("width");
       int height = call.argument("height");
-      printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, width, height ));
+      printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, width, height));
       result.success(true);
     } else if (call.method.equals("start")) {
       final String status = printerUtility.start();
@@ -262,24 +255,23 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
       int mode = call.argument("mode");
       printerUtility.cutPaper(mode);
       result.success(true);
-    }
-    else if (call.method.equals("getSN")){
-      IDAL dal =  printerUtility.getDal();
-        String sn = dal.getSys().getTermInfo().get(ETermInfoKey.SN);
-        if (sn != null) {
-          result.success(sn);
-        } else {
-          result.error("UNAVAILABLE", "SN not available.", null);
-        }
+    } else if (call.method.equals("getSN")) {
+      IDAL dal = printerUtility.getDal();
+      String sn = dal.getSys().getTermInfo().get(ETermInfoKey.SN);
+      if (sn != null) {
+        result.success(sn);
+      } else {
+        result.error("UNAVAILABLE", "SN not available.", null);
+      }
     } else if (call.method.equals("scan")) {
       IDAL dal = printerUtility.getDal();
-        if (dal == null) {
-          result.error("SCAN_ERROR", "DAL not available.", null);
-          return;
-        }
+      if (dal == null) {
+        result.error("SCAN_ERROR", "DAL not available.", null);
+        return;
+      }
 
-        ScannerUtil.scan(dal, scannerSink);
-        result.success(null);
+      ScannerUtil.scan(dal, scannerSink);
+      result.success(null);
 
     } else {
       result.notImplemented();
