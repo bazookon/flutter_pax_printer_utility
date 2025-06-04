@@ -13,7 +13,7 @@ import com.pax.dal.exceptions.PrinterDevException;
 import com.pax.neptunelite.api.NeptuneLiteUser;
 
 public class PrinterUtility {
-    private Context _context;
+    private final Context _context;
     private static  IDAL dal;
     private static IPrinter printer;
     private static PrinterUtility printerUtility;
@@ -31,7 +31,7 @@ public class PrinterUtility {
                 // Toast.makeText(this._context, "Get dal cost:"+(System.currentTimeMillis() - start)+" ms", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
-                 Toast.makeText(this._context, "error occurred,DAL is null.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this._context, "error occurred,DAL is null.", Toast.LENGTH_LONG).show();
             }
         }
         return dal;
