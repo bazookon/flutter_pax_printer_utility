@@ -14,7 +14,7 @@ import com.pax.neptunelite.api.NeptuneLiteUser;
 
 public class PrinterUtility {
     private final Context _context;
-    private static  IDAL dal;
+    private static IDAL dal;
     private static IPrinter printer;
     private static PrinterUtility printerUtility;
 
@@ -22,13 +22,10 @@ public class PrinterUtility {
         this._context = context;
     }
 
-    public IDAL getDal(){
-        if(dal == null){
+    public IDAL getDal() {
+        if (dal == null) {
             try {
-                long start = System.currentTimeMillis();
                 dal = NeptuneLiteUser.getInstance().getDal(this._context);
-                Log.i("Test","Get dal cost:"+(System.currentTimeMillis() - start)+" ms");
-                // Toast.makeText(this._context, "Get dal cost:"+(System.currentTimeMillis() - start)+" ms", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(this._context, "error occurred,DAL is null.", Toast.LENGTH_LONG).show();
@@ -41,11 +38,12 @@ public class PrinterUtility {
         try {
             printer = getDal().getPrinter();
             printer.init();
-            Log.i("INIT",  "INIT");
-            // Toast.makeText(this._context, "SUCCESS INIT PRINTER", Toast.LENGTH_LONG).show();
+            Log.i("INIT", "INIT");
+            // Toast.makeText(this._context, "SUCCESS INIT PRINTER",
+            // Toast.LENGTH_LONG).show();
         } catch (PrinterDevException e) {
             e.printStackTrace();
-            Log.e("INIT",  String.valueOf(e));
+            Log.e("INIT", String.valueOf(e));
             Toast.makeText(this._context, "error occurred,printer is null.", Toast.LENGTH_LONG).show();
         }
     }
@@ -53,8 +51,9 @@ public class PrinterUtility {
     public String getStatus() {
         try {
             int status = printer.getStatus();
-            Log.i("STATUS",  String.valueOf(status));
-            // Toast.makeText(this._context, "STATUS : " + String.valueOf(status), Toast.LENGTH_LONG).show();
+            Log.i("STATUS", String.valueOf(status));
+            // Toast.makeText(this._context, "STATUS : " + String.valueOf(status),
+            // Toast.LENGTH_LONG).show();
             return statusCode2Str(status);
         } catch (PrinterDevException e) {
             e.printStackTrace();
@@ -67,7 +66,7 @@ public class PrinterUtility {
     public void fontSet(EFontTypeAscii asciiFontType, EFontTypeExtCode cFontType) {
         try {
             printer.fontSet(asciiFontType, cFontType);
-            Log.i("FONT",  "SET FONT");
+            Log.i("FONT", "SET FONT");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("FONT", String.valueOf(e));
@@ -78,7 +77,7 @@ public class PrinterUtility {
     public void spaceSet(byte wordSpace, byte lineSpace) {
         try {
             printer.spaceSet(wordSpace, lineSpace);
-            Log.i("SPACE",  "SPACE SET");
+            Log.i("SPACE", "SPACE SET");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("SPACE", String.valueOf(e));
@@ -88,7 +87,7 @@ public class PrinterUtility {
     public void printStr(String str, String charset) {
         try {
             printer.printStr(str, charset);
-            Log.i("PRINT",  "PRINT");
+            Log.i("PRINT", "PRINT");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("PRINT", String.valueOf(e));
@@ -96,12 +95,10 @@ public class PrinterUtility {
 
     }
 
-
-
     public void step(int b) {
         try {
             printer.step(b);
-            Log.i("STEP",  "SET STEP");
+            Log.i("STEP", "SET STEP");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("STEP", String.valueOf(e));
@@ -111,7 +108,7 @@ public class PrinterUtility {
     public void printBitmap(Bitmap bitmap) {
         try {
             printer.printBitmap(bitmap);
-            Log.i("BITMAP",  "PRINT BITMAP");
+            Log.i("BITMAP", "PRINT BITMAP");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("BITMAP", String.valueOf(e));
@@ -121,19 +118,18 @@ public class PrinterUtility {
     public void printBitmapFromString(String text, int width, int height) {
         try {
             QRCodeUtil qrcodeUtility = new QRCodeUtil();
-            printer.printBitmap(qrcodeUtility.encodeAsBitmap(text, width, height ));
-            Log.i("BITMAP",  "PRINT BITMAP");
+            printer.printBitmap(qrcodeUtility.encodeAsBitmap(text, width, height));
+            Log.i("BITMAP", "PRINT BITMAP");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("BITMAP", String.valueOf(e));
         }
     }
 
-
     public String start() {
         try {
             int res = printer.start();
-            Log.i("START",  String.valueOf(res));
+            Log.i("START", String.valueOf(res));
             return statusCode2Str(res);
         } catch (PrinterDevException e) {
             e.printStackTrace();
@@ -146,7 +142,7 @@ public class PrinterUtility {
     public void leftIndents(int indent) {
         try {
             printer.leftIndent(indent);
-            Log.i("LIND",  "LEFT INDENT");
+            Log.i("LIND", "LEFT INDENT");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("LIND", String.valueOf(e));
@@ -156,7 +152,7 @@ public class PrinterUtility {
     public int getDotLine() {
         try {
             int dotLine = printer.getDotLine();
-            Log.i("DOT",  "GET DOT");
+            Log.i("DOT", "GET DOT");
             return dotLine;
         } catch (PrinterDevException e) {
             e.printStackTrace();
@@ -168,7 +164,7 @@ public class PrinterUtility {
     public void setGray(int level) {
         try {
             printer.setGray(level);
-            Log.i("GRAY",  "SET GRAY");
+            Log.i("GRAY", "SET GRAY");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("GRAY", String.valueOf(e));
@@ -179,7 +175,7 @@ public class PrinterUtility {
     public void setDoubleWidth(boolean isAscDouble, boolean isLocalDouble) {
         try {
             printer.doubleWidth(isAscDouble, isLocalDouble);
-            Log.i("DWTH",  "DOUBLE WIDTH");
+            Log.i("DWTH", "DOUBLE WIDTH");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("DWTH", String.valueOf(e));
@@ -189,7 +185,7 @@ public class PrinterUtility {
     public void setDoubleHeight(boolean isAscDouble, boolean isLocalDouble) {
         try {
             printer.doubleHeight(isAscDouble, isLocalDouble);
-            Log.i("DHGH",  "DOUBLE HEIGHT");
+            Log.i("DHGH", "DOUBLE HEIGHT");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("DHGH", String.valueOf(e));
@@ -200,7 +196,7 @@ public class PrinterUtility {
     public void setInvert(boolean isInvert) {
         try {
             printer.invert(isInvert);
-            Log.i("INVRT",  "SET INVERT");
+            Log.i("INVRT", "SET INVERT");
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("INVRT", String.valueOf(e));
@@ -211,7 +207,7 @@ public class PrinterUtility {
     public String cutPaper(int mode) {
         try {
             printer.cutPaper(mode);
-            Log.i("CUT",  "CUT PAPER");
+            Log.i("CUT", "CUT PAPER");
             return "cut paper successful";
         } catch (PrinterDevException e) {
             e.printStackTrace();
@@ -224,7 +220,7 @@ public class PrinterUtility {
         String resultStr = "";
         try {
             int mode = printer.getCutMode();
-            Log.i("CUTM",  "GET CUT MODE");
+            Log.i("CUTM", "GET CUT MODE");
             switch (mode) {
                 case 0:
                     resultStr = "Only support full paper cut";
