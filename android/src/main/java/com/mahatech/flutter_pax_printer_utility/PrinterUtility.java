@@ -46,6 +46,7 @@ public class PrinterUtility {
         } catch (PrinterDevException e) {
             e.printStackTrace();
             Log.e("INIT",  String.valueOf(e));
+            Toast.makeText(this._context, "error occurred,printer is null.", Toast.LENGTH_LONG).show();
         }
     }
 
