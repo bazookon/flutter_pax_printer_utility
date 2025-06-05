@@ -1,74 +1,117 @@
 # flutter_pax_printer_utility
 
-#### This package based on [PAX Device with NetptuneLiteApi](https://docs.hips.com/docs/pax-a920 "PAX Device") SDK
+This Flutter plugin is based on the PAX NeptuneLite API SDK and provides a simple interface to print on PAX terminal devices. Currently supports Android only.
 
-## Important: 
-  **THIS PACKAGE WILL WORK ONLY IN ANDROID!**
+## Installation
 
-## Installation  
+Add to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  flutter_pax_printer_utility: ^0.1.4
+```
+
+Or run:
 
 ```bash
 flutter pub add flutter_pax_printer_utility
 ```
 
+### Android setup
 
-## Set minify and shrink on your buildtype gradle
+In your `android/app/build.gradle`, ensure `minifyEnabled` and `shrinkResources` are disabled for release builds:
 
-```bash
-add this line in your build.gradle
+```groovy
 buildTypes {
     release {
-        .
-        .
-        .
+        ...
         minifyEnabled false
         shrinkResources false
     }
 }
 ```
 
-## What this package do
-- [✅] Init Printer => use init
-- [✅] Get Status Printer => use getStatus
-- [✅] set setGray level => use setGray
-- [✅] set Print => use setInvert
-- [✅] Change font set => use fontSet
-- [✅] Change space set => use spaceSet
-- [✅] Write some text => use printStr
-- [✅] Jump (n) lines => use step
-- [✅] Bold mode on/off => use setDoubleWidth and setDoubleHeight to true
-- [✅] Print Qrcodes => use printQRCode
-- [✅] Cut paper - Dedicated method just to cut the line
-- [✅] Print image from asset or from web (example show how to print both) => use printImageUrl
-- [✅] Print Bitmap => use printBitmap
-- [✅] Print Image From Asset => use printImageAsset
-- [✅]  Set Left Indents => use leftIndents
-- [ ] Draw a divisor line
-- [ ] Print all types of Barcodes (see enum below)
-- [ ] Print rows like recepit with custom width and alignment
-- [ ] Able to combine with some esc/pos code that you already have!
-- [ ] Printer serial no - Get the serial number of the printer
-- [ ] Printer version - Get the printer's version
-- [ ] Printer paper size - Get the paper size ( 0: 80mm 1: 58mm)
+## Getting started in your app
 
-## Other Function
-- Tempalte Print Receipt With QR => printReceiptWithQr
-- Template Print Receipt => printReceipt
-- Tempalte Print QR with info => printQRReceipt
+Import the plugin:
 
-## If you have an Pax Terminal printer and need help with integration process, just [Contact Me](https://saweria.co/overlays/qr?streamKey=54dc04b8045bb0355cde915ab1bb85b5&topLabel=MAHA&bottomLabel=Buy+Me+A+Coffe&backgroundColor=%232b9dfaFF&barcodeColor=%23000&username=maha)
-
- - [Github](https://github.com/AuliaVailo)
- - [Email](mailto:abdul.haq.aulia@gmail.com)
- - [Youtube](https://www.youtube.com/channel/UC02Kasrd4--IzX2mNcI2tWg)
- - [Linkdin](https://www.linkedin.com/in/moh-abdul-haq-aulia-29a925169/)
-
-## Tested Devices
-
-```bash
-PAX A920 
-PAX A910S
+```dart
+import 'package:flutter_pax_printer_utility/flutter_pax_printer_utility.dart';
 ```
 
-## Buy me a coffe
-If you want to support this package, you can [☕️ Buy Me a Coffee](https://www.buymeacoffee.com/abdulhaqaulia) <br>or you can scan this qr for support with [☕️ Saweria](https://saweria.co/overlays/qr?streamKey=54dc04b8045bb0355cde915ab1bb85b5&topLabel=MAHA&bottomLabel=Buy+Me+A+Coffe&backgroundColor=%232b9dfaFF&barcodeColor=%23000&username=maha)
+Initialize the printer before use:
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  bool? initSuccess = await FlutterPaxPrinterUtility.init;
+  if (initSuccess == true) {
+    // Now ready to print
+  }
+  runApp(MyApp());
+}
+```
+
+## Usage
+
+All methods return a `Future` and should be awaited. A complete list of available methods:
+
+- `FlutterPaxPrinterUtility.platformVersion`: get Android OS version.
+- `FlutterPaxPrinterUtility.init`: initialize printer (returns `bool?`).
+- `FlutterPaxPrinterUtility.getStatus`: get printer status (`PrinterStatus` enum).
+- `FlutterPaxPrinterUtility.printReceipt(String text)`: print a text receipt.
+- `FlutterPaxPrinterUtility.printReceiptWithQr(String text, String qrString)`: print receipt with a QR code.
+- `FlutterPaxPrinterUtility.printQRReceipt(String text1, String text2, String text3, String text4, String qrString)`: print template receipt with multiple lines and a QR code.
+- `FlutterPaxPrinterUtility.fontSet(EFontTypeAscii asciiFontType, EFontTypeExtCode cFontType)`: set ASCII and extended font types.
+- `FlutterPaxPrinterUtility.spaceSet(int wordSpace, int lineSpace)`: set word and line spacing.
+- `FlutterPaxPrinterUtility.printStr(String text, String? charset)`: print a string with optional charset.
+- `FlutterPaxPrinterUtility.step(int step)`: advance printer by steps.
+- `FlutterPaxPrinterUtility.printBitmap(Uint8List bitmap)`: print a bitmap image.
+- `FlutterPaxPrinterUtility.printImageUrl(String url)`: download and print image from URL.
+- `FlutterPaxPrinterUtility.printImageAsset(String assetPath)`: load and print image from Flutter assets.
+- `FlutterPaxPrinterUtility.printQRCode(String text, int width, int height)`: print a QR code.
+- `FlutterPaxPrinterUtility.leftIndents(int indent)`: set left indentation.
+- `FlutterPaxPrinterUtility.start()`: start printing buffered data (returns status `String`).
+- `FlutterPaxPrinterUtility.getDotLine()`: get number of printable lines per page (`int?`).
+- `FlutterPaxPrinterUtility.setGray(int level)`: set gray level.
+- `FlutterPaxPrinterUtility.setDoubleWidth(bool isAscDouble, bool isLocalDouble)`: enable/disable double width.
+- `FlutterPaxPrinterUtility.setDoubleHeight(bool isAscDouble, bool isLocalDouble)`: enable/disable double height.
+- `FlutterPaxPrinterUtility.setInvert(bool isInvert)`: enable/disable invert mode.
+- `FlutterPaxPrinterUtility.cutPaper(int mode)`: cut paper (0 full cut, 1 partial cut).
+- `FlutterPaxPrinterUtility.getSN()`: get printer serial number.
+- `FlutterPaxPrinterUtility.scan()`: start scanner once (returns `String?`).
+- `FlutterPaxPrinterUtility.scanStream`: receive continuous scan results as a `Stream<String>`.
+
+### Example: Print a simple receipt
+
+```dart
+await FlutterPaxPrinterUtility.init;
+String? status = await FlutterPaxPrinterUtility.printReceipt("Hello Pax Printer!");
+print("Printer responded: \$status");
+```
+
+### Example: Scan with built-in scanner
+
+```dart
+// Listen for scanned data
+final subscription = FlutterPaxPrinterUtility.scanStream.listen((code) {
+  print("Scanned: \$code");
+});
+// Start scanner
+await FlutterPaxPrinterUtility.scan();
+// Later, cancel subscription
+await subscription.cancel();
+```
+
+## Tested devices
+
+- PAX A920
+- PAX A910S
+
+## Contributing
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes and updates.
+
+## License
+
+[MIT](LICENSE)
