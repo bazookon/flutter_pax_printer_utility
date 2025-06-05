@@ -17,6 +17,9 @@ import com.pax.dal.entity.ScanResult;
 import com.pax.neptunelite.api.NeptuneLiteUser;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -24,7 +27,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 /** FlutterPaxPrinterUtilityPlugin */
-public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCallHandler {
+public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -53,9 +56,28 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
     });
 
     channel.setMethodCallHandler(this);
-    printerUtility =
-            new PrinterUtility(flutterPluginBinding.getApplicationContext());
+    // QR code utility has no context dependencies
     qrcodeUtility = new QRCodeUtil();
+  }
+  // Obtain Activity context for DAL initialization
+  @Override
+  public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+    printerUtility = new PrinterUtility(binding.getActivity());
+  }
+
+  @Override
+  public void onDetachedFromActivityForConfigChanges() {
+    onDetachedFromActivity();
+  }
+
+  @Override
+  public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+    onAttachedToActivity(binding);
+  }
+
+  @Override
+  public void onDetachedFromActivity() {
+    printerUtility = null;
   }
 
   @Override
