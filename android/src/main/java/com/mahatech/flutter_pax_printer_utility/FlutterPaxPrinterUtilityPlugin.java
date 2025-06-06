@@ -87,70 +87,90 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
               result.success("Android " + android.os.Build.VERSION.RELEASE);
               break;
           case "init":  // instant bind or init
-              printerUtility.getDal();
-              printerUtility.init();
-              result.success(true);
+              if (printerUtility != null) {
+                  printerUtility.getDal();
+                  printerUtility.init();
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "getStatus": {
-              String status = printerUtility.getStatus();
-              result.success(status);
+              if (printerUtility != null) {
+                  String status = printerUtility.getStatus();
+                  result.success(status);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "printReceipt": { // instant print receipt
-              String text = call.argument("text");
-              printerUtility.getDal();
-              printerUtility.init();
-              printerUtility.fontSet(EFontTypeAscii.FONT_8_16, EFontTypeExtCode.FONT_16_16);
-              printerUtility.spaceSet(parseByte("0"), parseByte("10"));
-              printerUtility.setGray(1);
-              printerUtility.printStr(text, null);
-              printerUtility.printStr("", null);
-              printerUtility.step(150);
-              final String status = printerUtility.start();
-              result.success(status);
+              if (printerUtility != null) {
+                  String text = call.argument("text");
+                  printerUtility.getDal();
+                  printerUtility.init();
+                  printerUtility.fontSet(EFontTypeAscii.FONT_8_16, EFontTypeExtCode.FONT_16_16);
+                  printerUtility.spaceSet(parseByte("0"), parseByte("10"));
+                  printerUtility.setGray(1);
+                  printerUtility.printStr(text, null);
+                  printerUtility.printStr("", null);
+                  printerUtility.step(150);
+                  final String status = printerUtility.start();
+                  result.success(status);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "printReceiptWithQr": { // instant print receipt
-              String text = call.argument("text");
-              String qrString = call.argument("qr_string");
-              printerUtility.getDal();
-              printerUtility.init();
-              printerUtility.fontSet(EFontTypeAscii.FONT_8_16, EFontTypeExtCode.FONT_16_16);
-              printerUtility.spaceSet(parseByte("0"), parseByte("10"));
-              printerUtility.setGray(1);
-              printerUtility.printStr(text, null);
-              printerUtility.printStr("", null);
-              if (qrString != null) {
-                  printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, 512, 512));
+              if (printerUtility != null) {
+                  String text = call.argument("text");
+                  String qrString = call.argument("qr_string");
+                  printerUtility.getDal();
+                  printerUtility.init();
+                  printerUtility.fontSet(EFontTypeAscii.FONT_8_16, EFontTypeExtCode.FONT_16_16);
+                  printerUtility.spaceSet(parseByte("0"), parseByte("10"));
+                  printerUtility.setGray(1);
+                  printerUtility.printStr(text, null);
                   printerUtility.printStr("", null);
+                  if (qrString != null) {
+                      printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, 512, 512));
+                      printerUtility.printStr("", null);
+                  }
+                  printerUtility.step(150);
+                  final String status = printerUtility.start();
+                  result.success(status);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
               }
-              printerUtility.step(150);
-              final String status = printerUtility.start();
-              result.success(status);
               break;
           }
           case "printQR": { // instant print qrcode
-              String text1 = call.argument("text1");
-              String text2 = call.argument("text2");
-              String text3 = call.argument("text3");
-              String text4 = call.argument("text4");
-              String qrString = call.argument("qr_string");
-              printerUtility.getDal();
-              printerUtility.init();
-              printerUtility.fontSet(EFontTypeAscii.FONT_8_16, EFontTypeExtCode.FONT_16_16);
-              printerUtility.spaceSet(parseByte("0"), parseByte("10"));
-              printerUtility.setGray(1);
-              printerUtility.printStr(text1, null);
-              printerUtility.printStr("", null);
-              printerUtility.printStr(text2, null);
-              printerUtility.printStr(text3, null);
-              printerUtility.printStr("", null);
-              printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, 512, 512));
-              printerUtility.printStr("", null);
-              printerUtility.printStr(text4, null);
-              printerUtility.step(150);
-              final String status = printerUtility.start();
-              result.success(status);
+              if (printerUtility != null) {
+                  String text1 = call.argument("text1");
+                  String text2 = call.argument("text2");
+                  String text3 = call.argument("text3");
+                  String text4 = call.argument("text4");
+                  String qrString = call.argument("qr_string");
+                  printerUtility.getDal();
+                  printerUtility.init();
+                  printerUtility.fontSet(EFontTypeAscii.FONT_8_16, EFontTypeExtCode.FONT_16_16);
+                  printerUtility.spaceSet(parseByte("0"), parseByte("10"));
+                  printerUtility.setGray(1);
+                  printerUtility.printStr(text1, null);
+                  printerUtility.printStr("", null);
+                  printerUtility.printStr(text2, null);
+                  printerUtility.printStr(text3, null);
+                  printerUtility.printStr("", null);
+                  printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, 512, 512));
+                  printerUtility.printStr("", null);
+                  printerUtility.printStr(text4, null);
+                  printerUtility.step(150);
+                  final String status = printerUtility.start();
+                  result.success(status);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "fontSet":
@@ -208,128 +228,199 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
                   cFontType = EFontTypeExtCode.FONT_16_16;
               }
 
-              printerUtility.fontSet(asciiFontType, cFontType);
-              result.success(true);
+              if (printerUtility != null) {
+                  printerUtility.fontSet(asciiFontType, cFontType);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "spaceSet":
-              String wordSpace = call.argument("wordSpace");
-              String lineSpace = call.argument("lineSpace");
-              printerUtility.spaceSet(parseByte(wordSpace), parseByte(lineSpace));
-              result.success(true);
+              if (printerUtility != null) {
+                  String wordSpace = call.argument("wordSpace");
+                  String lineSpace = call.argument("lineSpace");
+                  printerUtility.spaceSet(parseByte(wordSpace), parseByte(lineSpace));
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "printStr": {
-              String text = call.argument("text");
-              String charset = call.argument("charset");
-              printerUtility.printStr(text, charset);
-              result.success(true);
+              if (printerUtility != null) {
+                  String text = call.argument("text");
+                  String charset = call.argument("charset");
+                  printerUtility.printStr(text, charset);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "step":
-              int step = call.argument("step");
-              printerUtility.step(step);
-              result.success(true);
+              if (printerUtility != null) {
+                  int step = call.argument("step");
+                  printerUtility.step(step);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "printBitmap": {
-              byte[] bytes = call.argument("bitmap");
-              Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-              printerUtility.printBitmap(bitmap);
-              result.success(true);
+              if (printerUtility != null) {
+                  byte[] bytes = call.argument("bitmap");
+                  Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                  printerUtility.printBitmap(bitmap);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "printImageUrl":
-              String url = call.argument("url");
-              Thread thread = new Thread(new Runnable() {
-                  @Override
-                  public void run() {
-                      try {
-                          printerUtility.printBitmap(qrcodeUtility.getBitmapFromURL(url));
-                          result.success(true);
-                      } catch (Exception e) {
-                          e.printStackTrace();
+              if (printerUtility != null) {
+                  String url = call.argument("url");
+                  Thread thread = new Thread(new Runnable() {
+                      @Override
+                      public void run() {
+                          try {
+                              printerUtility.printBitmap(qrcodeUtility.getBitmapFromURL(url));
+                              result.success(true);
+                          } catch (Exception e) {
+                              e.printStackTrace();
+                          }
                       }
-                  }
-              });
+                  });
 
-              thread.start();
+                  thread.start();
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "printImageAsset": {
-              byte[] bytes = call.argument("bitmap");
-              Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-              printerUtility.printBitmap(bitmap);
-              result.success(true);
+              if (printerUtility != null) {
+                  byte[] bytes = call.argument("bitmap");
+                  Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                  printerUtility.printBitmap(bitmap);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "printQRCode": {
-              String qrString = call.argument("text");
-              int width = call.argument("width");
-              int height = call.argument("height");
-              printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, width, height));
-              result.success(true);
+              if (printerUtility != null) {
+                  String qrString = call.argument("text");
+                  int width = call.argument("width");
+                  int height = call.argument("height");
+                  printerUtility.printBitmap(qrcodeUtility.encodeAsBitmap(qrString, width, height));
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "start": {
-              final String status = printerUtility.start();
-              result.success(status);
+              if (printerUtility != null) {
+                  final String status = printerUtility.start();
+                  result.success(status);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "leftIndents":
-              int indent = call.argument("indent");
-              printerUtility.leftIndents(indent);
-              result.success(true);
+              if (printerUtility != null) {
+                  int indent = call.argument("indent");
+                  printerUtility.leftIndents(indent);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "getDotLine":
-              int dontLine = printerUtility.getDotLine();
-              result.success(dontLine);
+              if (printerUtility != null) {
+                  int dontLine = printerUtility.getDotLine();
+                  result.success(dontLine);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "setGray":
-              int level = call.argument("level");
-              printerUtility.setGray(level);
-              result.success(true);
+              if (printerUtility != null) {
+                  int level = call.argument("level");
+                  printerUtility.setGray(level);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "setDoubleWidth": {
-              boolean isAscDouble = call.argument("isAscDouble");
-              boolean isLocalDouble = call.argument("isLocalDouble");
-              printerUtility.setDoubleWidth(isAscDouble, isLocalDouble);
-              result.success(true);
+              if (printerUtility != null) {
+                  boolean isAscDouble = call.argument("isAscDouble");
+                  boolean isLocalDouble = call.argument("isLocalDouble");
+                  printerUtility.setDoubleWidth(isAscDouble, isLocalDouble);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "setDoubleHeight": {
-              boolean isAscDouble = call.argument("isAscDouble");
-              boolean isLocalDouble = call.argument("isLocalDouble");
-              printerUtility.setDoubleHeight(isAscDouble, isLocalDouble);
-              result.success(true);
+              if (printerUtility != null) {
+                  boolean isAscDouble = call.argument("isAscDouble");
+                  boolean isLocalDouble = call.argument("isLocalDouble");
+                  printerUtility.setDoubleHeight(isAscDouble, isLocalDouble);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           }
           case "setInvert":
-              boolean isInvert = call.argument("isInvert");
-              printerUtility.setInvert(isInvert);
-              result.success(true);
+              if (printerUtility != null) {
+                  boolean isInvert = call.argument("isInvert");
+                  printerUtility.setInvert(isInvert);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "cutPaper":
-              int mode = call.argument("mode");
-              printerUtility.cutPaper(mode);
-              result.success(true);
+              if (printerUtility != null) {
+                  int mode = call.argument("mode");
+                  printerUtility.cutPaper(mode);
+                  result.success(true);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
+              }
               break;
           case "getSN": {
-              IDAL dal = printerUtility.getDal();
-              String sn = dal.getSys().getTermInfo().get(ETermInfoKey.SN);
-              if (sn != null) {
-                  result.success(sn);
+              if (printerUtility != null) {
+                  IDAL dal = printerUtility.getDal();
+                  String sn = dal.getSys().getTermInfo().get(ETermInfoKey.SN);
+                  if (sn != null) {
+                      result.success(sn);
+                  } else {
+                      result.error("UNAVAILABLE", "SN not available.", null);
+                  }
               } else {
-                  result.error("UNAVAILABLE", "SN not available.", null);
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
               }
               break;
           }
           case "scan": {
-              IDAL dal = printerUtility.getDal();
-              if (dal == null) {
-                  result.error("SCAN_ERROR", "DAL not available.", null);
-                  return;
+              if (printerUtility != null) {
+                  IDAL dal = printerUtility.getDal();
+                  if (dal == null) {
+                      result.error("SCAN_ERROR", "DAL not available.", null);
+                      return;
+                  }
+
+                  ScannerUtil.scan(dal, scannerSink);
+                  result.success(null);
+              } else {
+                  result.error("PRINTER_UTILITY_NULL", "PrinterUtility is not initialized. Activity context is required.", null);
               }
-
-              ScannerUtil.scan(dal, scannerSink);
-              result.success(null);
-
               break;
           }
           default:

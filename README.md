@@ -8,7 +8,10 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_pax_printer_utility: ^0.1.4
+  flutter_pax_printer_utility:
+  git:
+    url: git@github.com:bazookon/flutter_pax_printer_utility.git
+    ref: main/
 ```
 
 Or run:

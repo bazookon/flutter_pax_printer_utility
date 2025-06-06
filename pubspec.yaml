@@ -1,7 +1,7 @@
 name: flutter_pax_printer_utility
 description: This package based on PAX Device with NetptuneLiteApi SDK and allows printing on PAX devices via Flutter apps on Android.
 version: 0.1.4
-homepage: https://github.com/AuliaVailo/flutter_pax_printer_utility
+homepage: https://github.com/bazookon/flutter_pax_printer_utility
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

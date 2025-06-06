@@ -40,6 +40,26 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
+        },
+        {
+            "name": "example_git",
+            "cwd": "example_git",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "example_git (profile mode)",
+            "cwd": "example_git",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "example_git (release mode)",
+            "cwd": "example_git",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
         }
     ]
 }
