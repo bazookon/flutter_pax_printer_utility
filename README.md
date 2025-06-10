@@ -34,6 +34,21 @@ buildTypes {
 }
 ```
 
+**Important:** In your `android/app/src/main/AndroidManifest.xml`, ensure that `android:taskAffinity=""` is **not** present in the `<activity>` tag. This attribute interferes with the PAX DAL initialization and will cause the plugin to fail with null pointer exceptions.
+
+```xml
+<!-- ❌ This will cause DAL initialization to fail -->
+<activity
+    android:name=".MainActivity"
+    android:taskAffinity=""
+    ... />
+
+<!-- ✅ Correct configuration -->
+<activity
+    android:name=".MainActivity"
+    ... />
+```
+
 ## Getting started in your app
 
 Import the plugin:
