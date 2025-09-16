@@ -26,9 +26,10 @@ public class PrinterUtility {
         if (dal == null) {
             try {
                 dal = NeptuneLiteUser.getInstance().getDal(this._context);
-            } catch (Exception e) {
+            } catch (Throwable e) { // catch Errors like UnsatisfiedLinkError from native libs
                 e.printStackTrace();
-                Toast.makeText(this._context, "error occurred,DAL is null.", Toast.LENGTH_LONG).show();
+                Log.e("DAL", "Failed to load PAX DAL (likely non-PAX device or missing native libs): " + e.getClass().getSimpleName());
+                Toast.makeText(this._context, "PAX DAL no disponible en este dispositivo.", Toast.LENGTH_SHORT).show();
             }
         }
         return dal;
@@ -36,20 +37,28 @@ public class PrinterUtility {
 
     public void init() {
         try {
-            printer = getDal().getPrinter();
-            printer.init();
-            Log.i("INIT", "INIT");
-            // Toast.makeText(this._context, "SUCCESS INIT PRINTER",
-            // Toast.LENGTH_LONG).show();
-        } catch (PrinterDevException e) {
+            IDAL d = getDal();
+            if (d == null) {
+                Log.e("INIT", "DAL is null. Skipping printer init.");
+                return;
+            }
+            printer = d.getPrinter();
+            if (printer != null) {
+                printer.init();
+                Log.i("INIT", "INIT");
+            } else {
+                Log.e("INIT", "Printer is null from DAL.");
+            }
+        } catch (Throwable e) {
             e.printStackTrace();
             Log.e("INIT", String.valueOf(e));
-            Toast.makeText(this._context, "error occurred,printer is null.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this._context, "No se pudo inicializar la impresora.", Toast.LENGTH_SHORT).show();
         }
     }
 
     public String getStatus() {
         try {
+            if (printer == null) return "";
             int status = printer.getStatus();
             Log.i("STATUS", String.valueOf(status));
             // Toast.makeText(this._context, "STATUS : " + String.valueOf(status),
@@ -65,6 +74,7 @@ public class PrinterUtility {
 
     public void fontSet(EFontTypeAscii asciiFontType, EFontTypeExtCode cFontType) {
         try {
+            if (printer == null) return;
             printer.fontSet(asciiFontType, cFontType);
             Log.i("FONT", "SET FONT");
         } catch (PrinterDevException e) {
@@ -76,6 +86,7 @@ public class PrinterUtility {
 
     public void spaceSet(byte wordSpace, byte lineSpace) {
         try {
+            if (printer == null) return;
             printer.spaceSet(wordSpace, lineSpace);
             Log.i("SPACE", "SPACE SET");
         } catch (PrinterDevException e) {
@@ -86,6 +97,7 @@ public class PrinterUtility {
 
     public void printStr(String str, String charset) {
         try {
+            if (printer == null) return;
             printer.printStr(str, charset);
             Log.i("PRINT", "PRINT");
         } catch (PrinterDevException e) {
@@ -97,6 +109,7 @@ public class PrinterUtility {
 
     public void step(int b) {
         try {
+            if (printer == null) return;
             printer.step(b);
             Log.i("STEP", "SET STEP");
         } catch (PrinterDevException e) {
@@ -107,6 +120,7 @@ public class PrinterUtility {
 
     public void printBitmap(Bitmap bitmap) {
         try {
+            if (printer == null) return;
             printer.printBitmap(bitmap);
             Log.i("BITMAP", "PRINT BITMAP");
         } catch (PrinterDevException e) {
@@ -117,6 +131,7 @@ public class PrinterUtility {
 
     public void printBitmapFromString(String text, int width, int height) {
         try {
+            if (printer == null) return;
             QRCodeUtil qrcodeUtility = new QRCodeUtil();
             printer.printBitmap(qrcodeUtility.encodeAsBitmap(text, width, height));
             Log.i("BITMAP", "PRINT BITMAP");
@@ -128,6 +143,7 @@ public class PrinterUtility {
 
     public String start() {
         try {
+            if (printer == null) return "";
             int res = printer.start();
             Log.i("START", String.valueOf(res));
             return statusCode2Str(res);
@@ -141,6 +157,7 @@ public class PrinterUtility {
 
     public void leftIndents(int indent) {
         try {
+            if (printer == null) return;
             printer.leftIndent(indent);
             Log.i("LIND", "LEFT INDENT");
         } catch (PrinterDevException e) {
@@ -151,6 +168,7 @@ public class PrinterUtility {
 
     public int getDotLine() {
         try {
+            if (printer == null) return -2;
             int dotLine = printer.getDotLine();
             Log.i("DOT", "GET DOT");
             return dotLine;
@@ -163,6 +181,7 @@ public class PrinterUtility {
 
     public void setGray(int level) {
         try {
+            if (printer == null) return;
             printer.setGray(level);
             Log.i("GRAY", "SET GRAY");
         } catch (PrinterDevException e) {
@@ -174,6 +193,7 @@ public class PrinterUtility {
 
     public void setDoubleWidth(boolean isAscDouble, boolean isLocalDouble) {
         try {
+            if (printer == null) return;
             printer.doubleWidth(isAscDouble, isLocalDouble);
             Log.i("DWTH", "DOUBLE WIDTH");
         } catch (PrinterDevException e) {
@@ -184,6 +204,7 @@ public class PrinterUtility {
 
     public void setDoubleHeight(boolean isAscDouble, boolean isLocalDouble) {
         try {
+            if (printer == null) return;
             printer.doubleHeight(isAscDouble, isLocalDouble);
             Log.i("DHGH", "DOUBLE HEIGHT");
         } catch (PrinterDevException e) {
@@ -195,6 +216,7 @@ public class PrinterUtility {
 
     public void setInvert(boolean isInvert) {
         try {
+            if (printer == null) return;
             printer.invert(isInvert);
             Log.i("INVRT", "SET INVERT");
         } catch (PrinterDevException e) {
@@ -206,6 +228,7 @@ public class PrinterUtility {
 
     public String cutPaper(int mode) {
         try {
+            if (printer == null) return "printer not initialized";
             printer.cutPaper(mode);
             Log.i("CUT", "CUT PAPER");
             return "cut paper successful";
@@ -219,6 +242,7 @@ public class PrinterUtility {
     public String getCutMode() {
         String resultStr = "";
         try {
+            if (printer == null) return "";
             int mode = printer.getCutMode();
             Log.i("CUTM", "GET CUT MODE");
             switch (mode) {

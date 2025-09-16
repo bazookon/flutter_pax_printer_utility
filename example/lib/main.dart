@@ -45,16 +45,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     initPlatformState();
     getPrinterStatus();
-
-    // Scanner
-    FlutterPaxPrinterUtility.scan().then((value) {
-      if (value == null) return;
-      // Toast message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(value),
-        backgroundColor: Colors.green,
-      ));
-    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.

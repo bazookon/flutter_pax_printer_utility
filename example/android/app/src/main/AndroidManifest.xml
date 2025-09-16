@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-   <application
+    <application
         android:label="flutter_pax_printer_utility_example"
         android:name="${applicationName}"
+          android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

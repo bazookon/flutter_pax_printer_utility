@@ -3,18 +3,29 @@ package com.mahatech.flutter_pax_printer_utility;
 import static java.lang.Byte.parseByte;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.util.Printer;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.pax.dal.IDAL;
+import com.pax.dal.IScanner;
 import com.pax.dal.entity.EFontTypeAscii;
 import com.pax.dal.entity.EFontTypeExtCode;
+import com.pax.dal.entity.EScannerType;
 import com.pax.dal.entity.ETermInfoKey;
+import com.pax.dal.entity.EUartPort;
 import com.pax.dal.entity.ScanResult;
 import com.pax.neptunelite.api.NeptuneLiteUser;
+
+import java.util.Objects;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.EventChannel;
@@ -35,15 +46,37 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
 
   final String SCANNER_STREAM = "flutter_pax_printer_utility/scanner";
   EventChannel.EventSink scannerSink = null;
+  private boolean scannerInitialized = false;
+
+  Context context;
+
+  // Receiver
+    BroadcastReceiver receiver;
+
+
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+
+      context = flutterPluginBinding.getApplicationContext();
+
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter_pax_printer_utility");
-    EventChannel scannerChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), SCANNER_STREAM);
-    scannerChannel.setStreamHandler(new EventChannel.StreamHandler() {
+        EventChannel scannerChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), SCANNER_STREAM);
+        scannerChannel.setStreamHandler(new EventChannel.StreamHandler() {
+
+
+
       @Override
       public void onListen(Object o, EventChannel.EventSink eventSink) {
         scannerSink = eventSink;
+                if (!scannerInitialized) {
+                    try {
+                        listenCode();
+                        scannerInitialized = true;
+                    } catch (Throwable t) {
+                        Log.e("SCAN", "Scanner listen init failed: " + t.getClass().getSimpleName());
+                    }
+                }
       }
 
       @Override
@@ -57,6 +90,9 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
     printerUtility = new PrinterUtility(flutterPluginBinding.getApplicationContext());
     // QR code utility has no context dependencies
     qrcodeUtility = new QRCodeUtil();
+
+   
+
   }
 
   @Override
@@ -68,6 +104,7 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
           case "init":  // instant bind or init
               printerUtility.getDal();
               printerUtility.init();
+
               result.success(true);
               break;
           case "getStatus": {
@@ -291,6 +328,10 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
               break;
           case "getSN": {
               IDAL dal = printerUtility.getDal();
+              if (dal == null) {
+                  result.error("UNAVAILABLE", "DAL not available.", null);
+                  break;
+              }
               String sn = dal.getSys().getTermInfo().get(ETermInfoKey.SN);
               if (sn != null) {
                   result.success(sn);
@@ -299,17 +340,7 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
               }
               break;
           }
-          case "scan": {
-              IDAL dal = printerUtility.getDal();
-              if (dal == null) {
-                  result.error("SCAN_ERROR", "DAL not available.", null);
-                  return;
-              }
-
-              ScannerUtil.scan(dal, scannerSink);
-              result.success(null);
-              break;
-          }
+          
           default:
               result.notImplemented();
               break;
@@ -320,4 +351,41 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     channel.setMethodCallHandler(null);
   }
+
+  private void listenCode(){
+      // check if scanner is available
+      IDAL dal = printerUtility.getDal();
+      if (dal == null) {
+          Log.w("SCAN", "DAL is null, skip listenCode");
+          return;
+      }
+
+
+      try {
+          dal.getSys().setScanResultMode(1);
+      } catch (Throwable t) {
+          Log.w("SCAN", "Scanner not available: " + t.getClass().getSimpleName());
+      }
+
+      IntentFilter filter = new IntentFilter();
+      receiver = new BroadcastReceiver() {
+          @Override
+          public void onReceive(Context context, Intent intent) {
+            Log.d("SCAN", "onReceive");
+            Log.d("SCAN", Objects.requireNonNull(intent.getStringExtra("BARCODE")));
+
+
+
+            if (scannerSink != null && intent.hasExtra("BARCODE") && intent.getStringExtra("BARCODE") != null && !Objects.requireNonNull(intent.getStringExtra("BARCODE")).isEmpty()) {
+              scannerSink.success(intent.getStringExtra("BARCODE"));
+            }
+          }
+      };
+
+      filter.addAction("com.barcode.sendBroadcast");
+      ContextCompat.registerReceiver(context, receiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
+
+  }
 }
+
+

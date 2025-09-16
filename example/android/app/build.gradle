@@ -63,6 +63,13 @@ android {
         }
     }
 
+    // Ensure native libraries are extracted (workaround for some PAX firmwares)
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+
 }
 
 flutter {

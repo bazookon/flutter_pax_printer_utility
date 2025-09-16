@@ -341,10 +341,6 @@ class FlutterPaxPrinterUtility {
 
   /// SCAN
   /// Returns a [Future] that completes with the printer's response as a [String].
-  static Future<String?> scan() async {
-    final String? response = await _channel.invokeMethod('scan');
-    return response;
-  }
 
   static Stream<String> get scanStream {
     const eventChannel = EventChannel('flutter_pax_printer_utility/scanner');
