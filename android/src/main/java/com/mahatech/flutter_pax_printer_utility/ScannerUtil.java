@@ -5,9 +5,9 @@ import android.util.Log;
 import com.pax.dal.IDAL;
 import com.pax.dal.IScanner;
 import com.pax.dal.entity.EScannerType;
+import com.pax.dal.entity.ScanResult;
 
 import io.flutter.plugin.common.EventChannel;
-import io.flutter.plugin.common.MethodChannel;
 
 public class ScannerUtil {
 
@@ -30,11 +30,12 @@ public class ScannerUtil {
                     try {
                         scanner.open();
                         scanner.start(new IScanner.IScanListener() {
-                            @Override
-                            public void onRead(String s) {
 
-                                Log.i("SCAN", s);
-                                scannerSink.success(s);
+                            @Override
+                            public void onRead(ScanResult scanResult) {
+                                Log.i("SCAN",scanResult.getContent());
+                                scannerSink.success(scanResult.getContent());
+
                             }
 
                             @Override

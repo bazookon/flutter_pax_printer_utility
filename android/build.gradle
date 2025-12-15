@@ -47,7 +47,7 @@ android {
 
 dependencies {
     // Include PAX NeptuneLiteApi jar explicitly
-    implementation files('libs/NeptuneLiteApi_V3.20.00_20201229.jar')
+    implementation files('libs/NeptuneLiteApi_V4.09.00_20240909.jar')
     // Also include any other jars placed in libs
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.zxing:core:3.1.0'
