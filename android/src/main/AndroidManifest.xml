@@ -1,29 +1,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.mahatech.flutter_pax_printer_utility">
+  xmlns:tools="http://schemas.android.com/tools"
+  package="com.mahatech.flutter_pax_printer_utility">
 
-</manifest>
-<application
-  android:extractNativeLibs="true"
-  tools:replace="extractNativeLibs" />
-    <uses-permission android:name="com.pax.permission.PRINTER"/>
-    <uses-permission android:name="com.pax.permission.SCANNER"/>
-    
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+  <!-- Permisos requeridos por el SDK de PAX -->
+  <uses-permission android:name="com.pax.permission.PRINTER" />
+  <uses-permission android:name="com.pax.permission.SCANNER" />
 
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.BLUETOOTH" />
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <queries>
-       <provider android:authorities="com.pax.neptune.filestorage" />
-    </queries>
+  <!-- Declaración para que el manifest final incluya extractNativeLibs -->
+  <application
+    android:extractNativeLibs="true"
+    tools:replace="extractNativeLibs" />
+
+  <!-- Consulta necesaria para el proveedor de Neptune file storage -->
+  <queries>
+    <provider android:authorities="com.pax.neptune.filestorage" />
+  </queries>
 
 </manifest>
