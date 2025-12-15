@@ -49,10 +49,8 @@ android {
         }
     }
     
-    // Ensure .so files are included in the build
-    libraryVariants.all { variant ->
-        variant.packageLibraryProvider.get().pickFirsts.add('**/*.so')
-    }
+    // Note: jniLibs.srcDirs already ensures .so files are packaged into the AAR/APK.
+    // Do not use internal APIs like variant.packageLibraryProvider which break on Gradle updates.
 }
 
 dependencies {
