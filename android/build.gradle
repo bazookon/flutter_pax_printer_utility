@@ -36,30 +36,22 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        ndk {
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86'
-        }
     }
+    
     // Ensure native libraries are packaged from jniLibs
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
+            // Explicitly include jniLibs in the AAR
+            resources {
+                srcDirs = ['src/main/jniLibs']
+            }
         }
     }
     
-    packagingOptions {
-        pickFirst 'lib/armeabi/libDeviceConfig.so'
-        pickFirst 'lib/armeabi-v7a/libDeviceConfig.so'
-        pickFirst 'lib/arm64-v8a/libDeviceConfig.so'
-        pickFirst 'lib/x86/libDeviceConfig.so'
-        pickFirst 'lib/armeabi/libDCL.so'
-        pickFirst 'lib/armeabi-v7a/libDCL.so'
-        pickFirst 'lib/arm64-v8a/libDCL.so'
-        pickFirst 'lib/x86/libDCL.so'
-        pickFirst 'lib/armeabi/libiconv.so'
-        pickFirst 'lib/armeabi-v7a/libiconv.so'
-        pickFirst 'lib/arm64-v8a/libiconv.so'
-        pickFirst 'lib/x86/libiconv.so'
+    // Ensure .so files are included in the build
+    libraryVariants.all { variant ->
+        variant.packageLibraryProvider.get().pickFirsts.add('**/*.so')
     }
 }
 
