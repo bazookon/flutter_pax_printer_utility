@@ -67,7 +67,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: b3a5b71f09118191783271ceb60631545e5e0019
+      resolved-ref: b22362a2d3fa210fd8eaf0325a7676f64b4fb790
       url: "git@github.com:bazookon/flutter_pax_printer_utility.git"
     source: git
     version: "0.1.4"
