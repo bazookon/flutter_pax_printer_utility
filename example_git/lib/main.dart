@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
@@ -54,13 +55,12 @@ class _HomePageState extends State<HomePage> {
     getPrinterStatus();
 
     // Scanner
-    FlutterPaxPrinterUtility.scan().then((value) {
-      if (value == null) return;
-      // Toast message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(value),
-        backgroundColor: Colors.green,
-      ));
+    FlutterPaxPrinterUtility.scanStream.listen((value) {
+      if (value.isNotEmpty) {
+        if (kDebugMode) {
+          print("Scan Result Home Page: $value");
+        }
+      }
     });
   }
 
@@ -133,8 +133,7 @@ class _HomePageState extends State<HomePage> {
     await FlutterPaxPrinterUtility.leftIndents(10);
     await FlutterPaxPrinterUtility.printStr(
         "          Example Git Test     \n", null);
-    await FlutterPaxPrinterUtility.printStr(
-        "           Jl. Test     \n", null);
+    await FlutterPaxPrinterUtility.printStr("           Jl. Test     \n", null);
     await FlutterPaxPrinterUtility.printStr(
         "            Testing      \n", null);
     await FlutterPaxPrinterUtility.printStr("\n", null);

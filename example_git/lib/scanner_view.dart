@@ -25,7 +25,7 @@ class _ScannerViewState extends State<ScannerView> {
       });
     });
 
-    FlutterPaxPrinterUtility.scan().then((value) {
+    FlutterPaxPrinterUtility.scanStream.listen((value) {
       if (kDebugMode) {
         print("Scan Result $value");
       }
