@@ -141,6 +141,7 @@ public class PrinterUtility {
         }
     }
 
+ 
     public String start() {
         try {
             if (printer == null) return "";

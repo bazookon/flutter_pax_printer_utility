@@ -252,6 +252,10 @@ public class FlutterPaxPrinterUtilityPlugin implements FlutterPlugin, MethodCall
               result.success(true);
               break;
           }
+
+          case "printBarcode":
+
+              break;
           case "printImageUrl":
               String url = call.argument("url");
               Thread thread = new Thread(new Runnable() {

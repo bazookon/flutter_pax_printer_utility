@@ -26,13 +26,18 @@ class _ScannerViewState extends State<ScannerView> {
     });
     // Scanner
     FlutterPaxPrinterUtility.scanStream.listen((event) {
-      print("Scanned Data: $event");
+      if (kDebugMode) {
+        print("Scanned Data: $event");
+      }
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Scanned Data: $event"),
         backgroundColor: Colors.green,
       ));
     }, onError: (error) {
-      print("Scanner Error: $error");
+      if (kDebugMode) {
+        print("Scanner Error: $error");
+      }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Scanner Error: $error"),
         backgroundColor: Colors.red,
