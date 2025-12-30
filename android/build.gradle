@@ -36,6 +36,9 @@ android {
 
     defaultConfig {
         minSdkVersion 16
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
     }
     
     // Ensure native libraries are packaged from jniLibs
